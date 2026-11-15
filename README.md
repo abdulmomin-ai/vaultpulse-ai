@@ -37,5 +37,6 @@ npm run dev
 ---
 
 
+
 ## 👨‍💻 Author
-Built & Architected by **Abdul Momin** — Full-Stack AI & Cloud FinOps Engineering
+Built by **Abdul Momin** — AI Engineer
