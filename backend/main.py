@@ -105,21 +105,38 @@ def toggle_optimization(opt_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"id": opt.id, "applied": opt.applied}
 
-# Sandbox Estimator
-@app.post("/api/v1/sandbox/estimate")
-def sandbox_estimate(data: dict):
+# Sandbox Simulation
+@app.post("/api/v1/sandbox/simulate")
+def sandbox_simulate(data: dict):
     prompt = data.get("prompt", "")
     model = data.get("model", "gpt-4o")
-    prompt_tokens = max(1, int(len(prompt) / 3.5))
-    completion_tokens = 145
-    total = prompt_tokens + completion_tokens
 
-    rate = 0.0025 if "gpt-4o" in model else 0.003 if "claude" in model else 0.00075
-    cost = round((total / 1000) * rate, 5)
+    # Logic: 1 token ~ 4 chars
+    prompt_tokens = max(1, int(len(prompt) / 4))
+    completion_tokens = 150 # Simulated output length
+    total_tokens = prompt_tokens + completion_tokens
+
+    # Model config
+    models_config = {
+        "gpt-4o": {"rate": 0.005, "latency": 0.4},
+        "gpt-4o-mini": {"rate": 0.00015, "latency": 0.2},
+        "claude-3-5-sonnet": {"rate": 0.003, "latency": 0.6},
+        "gemini-1.5-flash": {"rate": 0.000075, "latency": 0.3}
+    }
+
+    conf = models_config.get(model, models_config["gpt-4o"])
+    cost = (total_tokens / 1000) * conf["rate"]
 
     return {
-        "prompt_tokens": prompt_tokens,
-        "completion_tokens": completion_tokens,
-        "total_tokens": total,
-        "estimated_cost": f"${cost:.4f}"
+        "prompt": prompt,
+        "model": model,
+        "tokens": {
+            "input": prompt_tokens,
+            "output": completion_tokens,
+            "total": total_tokens
+        },
+        "cost": f"${cost:.6f}",
+        "latency_sec": conf["latency"],
+        "response": f"Simulated response for '{prompt[:20]}...' using {model}. Content generated with efficiency in mind."
     }
+

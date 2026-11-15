@@ -44,3 +44,5 @@ export const MOCK_ALERTS = [
   { id: 2, title: 'Auto Kill-Switch Triggered', description: 'OpenAI Legacy QA Key exceeded daily quota and was automatically disabled.', time: '2 hours ago', type: 'danger', active: true },
   { id: 3, title: 'Unusual Token Spike Detected', description: 'GPT-4o token volume spiked by 340% over baseline in US-East.', time: '5 hours ago', type: 'info', active: false },
 ];
+
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
