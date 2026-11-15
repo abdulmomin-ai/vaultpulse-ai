@@ -1,4 +1,4 @@
-# VaultPulse AI — Cloud FinOps & AI Token Cost Management System
+﻿# VaultPulse AI — Cloud FinOps & AI Token Cost Management System
 
 VaultPulse AI is an end-to-end monorepo application designed to monitor, optimize, and govern AI token expenditure across major foundation models (OpenAI, Anthropic, Google Gemini).
 
@@ -36,5 +36,6 @@ npm run dev
 
 ---
 
-## 🤖 Generated with Claude Code
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+## 👨‍💻 Author
+Built & Architected by **Abdul Momin** — Full-Stack AI & Cloud FinOps Engineering
