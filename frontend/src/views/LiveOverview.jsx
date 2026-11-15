@@ -29,8 +29,8 @@ export default function LiveOverview({ apiKeys }) {
         </div>
       </div>
 
-      {/* 4 Animated KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* 4 Animated KPI Cards (Mobile-first responsive grid) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
         {kpis.map((kpi, idx) => {
           const Icon = kpi.icon;
           return (
@@ -60,17 +60,17 @@ export default function LiveOverview({ apiKeys }) {
       </div>
 
       {/* Bento Grid: Live Token Burn Chart & Provider Spend Breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 md:gap-6">
         {/* Live Token Burn Spline Chart */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="col-span-12 lg:col-span-8 glass p-6 rounded-2xl border border-white/10 relative"
+          className="col-span-12 xl:col-span-8 glass p-4 md:p-6 rounded-2xl border border-white/10 relative"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-6 gap-2">
             <div>
-              <h3 className="text-xl font-bold">Live Token Burn Velocity</h3>
+              <h3 className="text-lg md:text-xl font-bold">Live Token Burn Velocity</h3>
               <p className="text-xs text-slate-400 mt-0.5">Hourly token consumption and dollar spend across models</p>
             </div>
             <div className="flex items-center gap-2">
@@ -82,7 +82,7 @@ export default function LiveOverview({ apiKeys }) {
           </div>
 
           {/* SVG Animated Telemetry Chart */}
-          <div className="h-72 w-full relative flex items-end pt-8 px-2">
+          <div className="h-64 md:h-72 w-full relative flex items-end pt-8 px-2">
             <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 700 200">
               <defs>
                 <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -109,7 +109,7 @@ export default function LiveOverview({ apiKeys }) {
             </svg>
 
             {/* X-Axis labels */}
-            <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[11px] font-mono text-slate-500 border-t border-white/10 pt-2">
+            <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[10px] md:text-[11px] font-mono text-slate-500 border-t border-white/10 pt-2">
               {MOCK_CHART_DATA.map((d, i) => (
                 <span key={i}>{d.time}</span>
               ))}
@@ -122,13 +122,13 @@ export default function LiveOverview({ apiKeys }) {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="col-span-12 lg:col-span-4 glass p-6 rounded-2xl border border-white/10 flex flex-col justify-between"
+          className="col-span-12 xl:col-span-4 glass p-4 md:p-6 rounded-2xl border border-white/10 flex flex-col justify-between"
         >
           <div>
-            <h3 className="text-xl font-bold mb-1">Provider Attribution</h3>
-            <p className="text-xs text-slate-400 mb-6">Cost breakdown by AI foundation</p>
+            <h3 className="text-lg md:text-xl font-bold mb-1">Provider Attribution</h3>
+            <p className="text-xs text-slate-400 mb-4 md:mb-6">Cost breakdown by AI foundation</p>
 
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {[
                 { name: 'OpenAI (GPT-4o / 3.5)', spend: '$2,410.00', pct: 56, color: 'bg-emerald-500' },
                 { name: 'Anthropic (Claude 3.5 Sonnet)', spend: '$1,480.50', pct: 34, color: 'bg-purple-500' },
@@ -136,8 +136,8 @@ export default function LiveOverview({ apiKeys }) {
               ].map((item, idx) => (
                 <div key={idx} className="space-y-1.5">
                   <div className="flex justify-between text-sm">
-                    <span className="font-medium text-slate-200">{item.name}</span>
-                    <span className="font-bold text-white">{item.spend}</span>
+                    <span className="font-medium text-slate-200 truncate mr-2">{item.name}</span>
+                    <span className="font-bold text-white shrink-0">{item.spend}</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
                     <motion.div
@@ -152,7 +152,7 @@ export default function LiveOverview({ apiKeys }) {
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+          <div className="mt-4 md:mt-6 pt-3 md:pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
             <span>Optimization Potential</span>
             <span className="text-indigo-400 font-semibold flex items-center gap-1">
               <Zap className="w-3.5 h-3.5" /> Save ~$1,240/mo

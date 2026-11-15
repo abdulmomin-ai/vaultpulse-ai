@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, KeyRound, Zap, Bell, Terminal,
   Search, ShieldAlert, Cpu, Sparkles, ChevronDown,
-  Activity, CheckCircle2, AlertTriangle, Plus, X, Power
+  Activity, CheckCircle2, AlertTriangle, Plus, X, Power, Menu
 } from 'lucide-react';
 import { MOCK_WORKSPACES, MOCK_API_KEYS, MOCK_OPTIMIZATIONS, MOCK_ALERTS } from '../services/api';
 
@@ -18,6 +18,7 @@ export default function Layout() {
   const [activeWorkspace, setActiveWorkspace] = useState(MOCK_WORKSPACES[0]);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
   const [isCmdOpen, setIsCmdOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Global state that can be mutated by views
@@ -63,12 +64,12 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex h-screen bg-[#07080f] text-white overflow-hidden font-sans">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-[#07080f] text-white overflow-hidden font-sans relative">
+      {/* Desktop Sidebar */}
       <motion.aside
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="w-72 glass border-r border-white/10 flex flex-col justify-between p-6 z-20"
+        className="hidden lg:flex w-72 glass border-r border-white/10 flex-col justify-between p-6 z-20"
       >
         <div>
           {/* Logo */}
@@ -130,21 +131,112 @@ export default function Layout() {
         </div>
       </motion.aside>
 
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden"
+            />
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-80 glass border-r border-white/10 flex flex-col justify-between p-6 z-50 lg:hidden bg-[#0a0d18]"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                      <Sparkles className="w-5 h-5 text-white animate-pulse" />
+                    </div>
+                    <div>
+                      <h1 className="text-xl font-bold bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
+                        VaultPulse AI
+                      </h1>
+                      <p className="text-xs text-indigo-300/60 font-medium">FinOps & Token Engine</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-2 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <nav className="space-y-2">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentView === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setCurrentView(item.id);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`flex items-center gap-3.5 w-full px-4 py-3 rounded-xl font-medium text-sm transition-all ${
+                          isActive
+                            ? 'text-white bg-indigo-600/20 border border-indigo-500/30'
+                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        <Icon className={`w-5 h-5 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                        {item.name}
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              <div className="glass p-3 rounded-xl border border-white/10 bg-white/[0.02]">
+                <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                  <span>Telemetry Status</span>
+                  <span className="flex items-center gap-1.5 text-emerald-400">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    Live Feed
+                  </span>
+                </div>
+                <div className="text-xs font-mono text-slate-300 truncate">
+                  Connected to FastAPI v1.4
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gradient-to-br from-[#07080f] via-[#0b0e1b] to-[#07080f]">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gradient-to-br from-[#07080f] via-[#0b0e1b] to-[#07080f] w-full">
 
         {/* Top Command Bar */}
-        <header className="h-20 border-b border-white/10 px-8 flex items-center justify-between glass z-10">
-          <div className="flex items-center gap-4">
+        <header className="h-20 border-b border-white/10 px-4 md:px-8 flex items-center justify-between glass z-10 gap-2">
+          <div className="flex items-center gap-3">
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="lg:hidden p-2.5 rounded-xl glass border border-white/10 text-slate-300 hover:text-white hover:bg-white/5"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
             {/* Workspace Selector Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsWorkspaceOpen(!isWorkspaceOpen)}
-                className="flex items-center gap-3 px-4 py-2.5 rounded-xl glass border border-white/10 hover:bg-white/5 transition-all text-sm font-medium"
+                className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 rounded-xl glass border border-white/10 hover:bg-white/5 transition-all text-xs md:text-sm font-medium"
               >
-                <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-                <span>{activeWorkspace.name}</span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isWorkspaceOpen ? 'rotate-180' : ''}`} />
+                <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0" />
+                <span className="truncate max-w-[120px] md:max-w-none">{activeWorkspace.name}</span>
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform shrink-0 ${isWorkspaceOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -177,24 +269,25 @@ export default function Layout() {
           </div>
 
           {/* Quick Search & User Profile */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <button
               onClick={() => setIsCmdOpen(true)}
-              className="flex items-center gap-3 px-4 py-2 rounded-xl glass border border-white/10 text-slate-400 hover:text-white hover:border-indigo-500/50 transition-all text-sm"
+              className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 rounded-xl glass border border-white/10 text-slate-400 hover:text-white hover:border-indigo-500/50 transition-all text-xs md:text-sm"
             >
-              <Search className="w-4 h-4 text-slate-400" />
-              <span>Search metrics, keys, models...</span>
-              <kbd className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-slate-300">⌘K</kbd>
+              <Search className="w-4 h-4 text-slate-400 shrink-0" />
+              <span className="hidden sm:inline">Search metrics, keys, models...</span>
+              <span className="sm:hidden">Search...</span>
+              <kbd className="hidden md:inline-block px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-slate-300">⌘K</kbd>
             </button>
 
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-sm shadow-lg shadow-purple-500/20 border border-white/20">
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs md:text-sm shadow-lg shadow-purple-500/20 border border-white/20 shrink-0">
               VP
             </div>
           </div>
         </header>
 
         {/* Dynamic View Container */}
-        <div className="flex-1 overflow-y-auto p-8 relative">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 relative overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentView}
@@ -202,7 +295,7 @@ export default function Layout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="max-w-7xl mx-auto pb-12"
+              className="max-w-7xl mx-auto pb-12 w-full"
             >
               {renderView()}
             </motion.div>
@@ -221,7 +314,7 @@ export default function Layout() {
               className="w-full max-w-2xl glass rounded-2xl border border-white/20 shadow-2xl overflow-hidden bg-[#0a0d18]/95"
             >
               <div className="flex items-center px-4 py-3 border-b border-white/10">
-                <Search className="w-5 h-5 text-indigo-400 mr-3" />
+                <Search className="w-5 h-5 text-indigo-400 mr-3 shrink-0" />
                 <input
                   type="text"
                   placeholder="Type a command or search (e.g., kill-switch, export logs)..."
@@ -257,7 +350,7 @@ export default function Layout() {
                       }}
                       className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl hover:bg-indigo-600/20 text-slate-300 hover:text-white transition-colors text-sm group"
                     >
-                      <Icon className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                      <Icon className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform shrink-0" />
                       <span>{item.name}</span>
                     </button>
                   );

@@ -61,15 +61,15 @@ export default function ApiKeysKillSwitch({ apiKeys, setApiKeys }) {
         animate={{ opacity: 1, y: 0 }}
         className="glass rounded-2xl border border-white/10 overflow-hidden shadow-2xl"
       >
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto -mx-2 md:mx-0">
+          <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr className="border-b border-white/10 bg-white/[0.02] text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                <th className="py-4 px-6">Key Name & Provider</th>
-                <th className="py-4 px-6">Masked Key</th>
-                <th className="py-4 px-6">Monthly Spend / Quota</th>
-                <th className="py-4 px-6">Kill-Switch State</th>
-                <th className="py-4 px-6 text-right">Actions</th>
+                <th className="py-3 md:py-4 px-4 md:px-6">Key Name & Provider</th>
+                <th className="py-3 md:py-4 px-4 md:px-6">Masked Key</th>
+                <th className="py-3 md:py-4 px-4 md:px-6">Monthly Spend / Quota</th>
+                <th className="py-3 md:py-4 px-4 md:px-6">Kill-Switch State</th>
+                <th className="py-3 md:py-4 px-4 md:px-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-sm">
@@ -84,13 +84,13 @@ export default function ApiKeysKillSwitch({ apiKeys, setApiKeys }) {
                     animate={{ opacity: 1 }}
                     className="hover:bg-white/[0.02] transition-colors group"
                   >
-                    <td className="py-4 px-6">
-                      <div className="font-semibold text-white">{key.name}</div>
+                    <td className="py-3 md:py-4 px-4 md:px-6">
+                      <div className="font-semibold text-white text-sm md:text-base">{key.name}</div>
                       <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono mt-1 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
                         {key.provider}
                       </span>
                     </td>
-                    <td className="py-4 px-6 font-mono text-slate-300 text-xs">
+                    <td className="py-3 md:py-4 px-4 md:px-6 font-mono text-slate-300 text-xs">
                       <div className="flex items-center gap-2">
                         <span>{key.maskedKey}</span>
                         <button
@@ -102,12 +102,12 @@ export default function ApiKeysKillSwitch({ apiKeys, setApiKeys }) {
                         </button>
                       </div>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="py-3 md:py-4 px-4 md:px-6">
                       <div className="flex justify-between text-xs mb-1 font-medium">
                         <span className="text-slate-200">${key.usage.toFixed(2)}</span>
                         <span className="text-slate-400">Limit: ${key.quota}</span>
                       </div>
-                      <div className="w-36 h-2 rounded-full bg-white/5 overflow-hidden">
+                      <div className="w-32 md:w-36 h-2 rounded-full bg-white/5 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
                             isOverQuota ? 'bg-rose-500 animate-pulse' : pct > 80 ? 'bg-amber-500' : 'bg-indigo-500'
@@ -116,7 +116,7 @@ export default function ApiKeysKillSwitch({ apiKeys, setApiKeys }) {
                         />
                       </div>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="py-3 md:py-4 px-4 md:px-6">
                       <div className="flex items-center gap-3">
                         {/* Animated Spring Kill-Switch Toggle */}
                         <button
@@ -140,7 +140,7 @@ export default function ApiKeysKillSwitch({ apiKeys, setApiKeys }) {
                         </span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-right">
+                    <td className="py-3 md:py-4 px-4 md:px-6 text-right">
                       <button
                         onClick={() => setApiKeys(apiKeys.filter(k => k.id !== key.id))}
                         className="p-2 rounded-xl hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
