@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian-900: #07080f;
+  --color-obsidian-800: #0f111a;
+  --color-obsidian-700: #1a1d2e;
+}
+
+body {
+  background-color: var(--color-obsidian-900);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
