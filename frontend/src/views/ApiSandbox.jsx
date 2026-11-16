@@ -37,7 +37,8 @@ export default function ApiSandbox() {
       // Client-side fallback if backend is offline/Vercel static
       setTimeout(() => {
         const promptTokens = Math.max(1, Math.round(prompt.length / 4));
-        const completionTokens = 145;
+        // Dynamic completion tokens: base 100 + scale with prompt (e.g. 20% of prompt length)
+        const completionTokens = Math.max(100, Math.round(100 + (promptTokens * 0.2)));
         const totalTokens = promptTokens + completionTokens;
 
         const rates = {

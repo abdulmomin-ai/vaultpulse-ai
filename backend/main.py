@@ -113,7 +113,7 @@ def sandbox_simulate(data: dict):
 
     # Logic: 1 token ~ 4 chars
     prompt_tokens = max(1, int(len(prompt) / 4))
-    completion_tokens = 150 # Simulated output length
+    completion_tokens = max(100, int(100 + (prompt_tokens * 0.2)))
     total_tokens = prompt_tokens + completion_tokens
 
     # Model config
